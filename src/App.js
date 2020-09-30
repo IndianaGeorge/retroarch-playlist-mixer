@@ -1,24 +1,24 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import styles from './App.module.css';
+
+import {sourceContext, targetContext} from './Context/PlaylistContext'
+
+import Playlist from './UI/Playlist.js'
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+    <div className={styles.App}>
+      <header className={styles.header}>
+        <h1 className={styles.title}>Retroarch playlist mixer</h1>
       </header>
+      <div className={styles.playlistPanel}>
+        <Playlist controller={sourceContext} />
+        <Playlist controller={targetContext} />
+      </div>
+      <div className={styles.textPanel}>
+        <input />
+        <textarea rows="6" disabled value="console"></textarea>
+      </div>
     </div>
   );
 }
