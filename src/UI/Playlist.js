@@ -9,6 +9,7 @@ import Game from './Game'
 export default (props)=>{
   const Controller = useContext(props.controller);
   const [playlist] = useStateEvents(null, Controller.getPlaylistEvents());
+  const [filteredItems] = useStateEvents(null, Controller.getfilteredItemsEvents());
   const [filename] = useStateEvents(null, Controller.getFilenameEvents());
 
   const onDrop = useCallback((acceptedFiles) => {
@@ -36,8 +37,8 @@ export default (props)=>{
       </div>
       <div className={styles.content}>
         {
-          playlist?
-            playlist.items.map(
+          filteredItems?
+            filteredItems.map(
               (game,index)=> (
                 <Game
                   key={index}
