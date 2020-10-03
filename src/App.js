@@ -5,10 +5,6 @@ import {sourceContext, targetContext} from './Context/PlaylistContext'
 
 import Playlist from './UI/Playlist.js'
 
-const deleteOnClick = ()=>{
-  console.log(`Delete this game!`);
-}
-
 export default ()=>{
   const sourceController = useContext(sourceContext);
   const targetController = useContext(targetContext);
@@ -17,6 +13,10 @@ export default ()=>{
   const copyOnClick = (gameData)=>{
     targetController.add(gameData);
     targetController.filter("label", filter);
+  }
+
+  const deleteOnClick = ()=>{
+    targetController.delete(`Delete this game!`);
   }
   
   const updateFilter = filterText=>{
