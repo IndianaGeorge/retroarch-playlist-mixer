@@ -8,7 +8,7 @@ import Game from './Game'
 
 export default (props)=>{
   const Controller = useContext(props.controller);
-  const [playlist] = useStateEvents(null, Controller.getPlaylistEvents());
+  //const [playlist] = useStateEvents(null, Controller.getPlaylistEvents());
   const [filteredItems] = useStateEvents(null, Controller.getfilteredItemsEvents());
   const [filename] = useStateEvents(null, Controller.getFilenameEvents());
 
@@ -26,7 +26,7 @@ export default (props)=>{
       }
       reader.readAsText(file)  
     }
-  }, []);
+  }, [Controller]);
 
   const {getRootProps, getInputProps} = useDropzone({onDrop})
 
@@ -41,6 +41,7 @@ export default (props)=>{
             filteredItems.map(
               (game,index)=> (
                 <Game
+                  onClick={props.onGameClick}
                   key={index}
                   path={game.path}
                   label={game.label}

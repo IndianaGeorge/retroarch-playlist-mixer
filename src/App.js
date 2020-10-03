@@ -1,19 +1,26 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import styles from './App.module.css';
 
-import { useStateEvents } from 'react-state-events';
 import {sourceContext, targetContext} from './Context/PlaylistContext'
-import filterContext from './Context/FilterContext'
 
 import Playlist from './UI/Playlist.js'
 
-function App() {
-  const filterController = useContext(filterContext);
+const deleteOnClick = ()=>{
+  console.log(`Delete this game!`);
+}
+
+export default ()=>{
   const sourceController = useContext(sourceContext);
   const targetController = useContext(targetContext);
-  const filterEvents = filterController.getEvents();
-  const [filter, setFilter] = useStateEvents("", filterEvents);
+  const [filter,setFilter] = useState("");
+
+  const copyOnClick = (gameData)=>{
+    targetController.add(gameData);
+    targetController.filter("label", filter);
+  }
+  
   const updateFilter = filterText=>{
+    setFilter(filterText.target.value);
     sourceController.filter("label",filterText.target.value);
     targetController.filter("label",filterText.target.value);
   }
@@ -23,8 +30,8 @@ function App() {
         <h1 className={styles.title}>Retroarch playlist mixer</h1>
       </header>
       <div className={styles.playlistPanel}>
-        <Playlist controller={sourceContext} />
-        <Playlist controller={targetContext} />
+        <Playlist controller={sourceContext} onGameClick={copyOnClick}/>
+        <Playlist controller={targetContext} onGameClick={deleteOnClick}/>
       </div>
       <div className={styles.textPanel}>
         <input onChange={updateFilter}/>
@@ -33,5 +40,3 @@ function App() {
     </div>
   );
 }
-
-export default App;

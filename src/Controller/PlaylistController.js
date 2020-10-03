@@ -93,5 +93,16 @@ export default class PlaylistController {
 //        this.index();
         this.publish();
     }
+    
+    add(game) {
+        this.playlist = JSON.parse(JSON.stringify(this.playlist));
+        this.playlist.items.push({...game});
+    }
+
+    delete(index) {
+        this.playlist = JSON.parse(JSON.stringify(this.playlist));
+        this.playlist.items.splice(index,1);
+        this.publish();
+    }
 
 }
