@@ -1,3 +1,6 @@
+# Retroarch Playlist Mixer
+[Try it out!](https://indianageorge.github.io/retroarch-playlist-mixer/)
+
 ## What?
 
 This is a playlist mixer for [Retroarch](https://www.retroarch.com/) playlists (version 1.2 only, json format).
