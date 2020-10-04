@@ -33,3 +33,12 @@
   display: flex;
   flex-direction: column;
 }
+
+.filter {
+  display: flex;
+  flex-direction: row;
+}
+
+.filterText {
+  flex-grow: 1;
+}

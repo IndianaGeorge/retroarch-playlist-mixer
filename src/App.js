@@ -10,13 +10,19 @@ export default ()=>{
   const targetController = useContext(targetContext);
   const [filter,setFilter] = useState("");
 
-  const copyOnClick = (gameData)=>{
+  const copyOnClick = (gameData,index)=>{
     targetController.add(gameData);
     targetController.filter("label", filter);
   }
 
-  const deleteOnClick = ()=>{
-    targetController.delete(`Delete this game!`);
+  const deleteOnClick = (gameData,index)=>{
+    targetController.delete(index);
+    targetController.filter("label", filter);
+  }
+
+  const clearFilter = ()=>{
+    setFilter("");
+    sourceController.filter("label",filter);
   }
   
   const updateFilter = filterText=>{
@@ -34,7 +40,10 @@ export default ()=>{
         <Playlist controller={targetContext} onGameClick={deleteOnClick}/>
       </div>
       <div className={styles.textPanel}>
-        <input onChange={updateFilter}/>
+        <div className={styles.filter}>
+          <input onChange={updateFilter} value={filter} className={styles.filterText} />
+          <button onClick={clearFilter}>clear</button>
+        </div>
         <textarea rows="6" disabled value="console"></textarea>
       </div>
     </div>

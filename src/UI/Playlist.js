@@ -47,7 +47,7 @@ export default (props)=>{
             filteredItems.map(
               (game,index)=> (
                 <Game
-                  onClick={props.onGameClick}
+                  onClick={()=>props.onGameClick(game,index)}
                   key={index}
                   path={game.path}
                   label={game.label}

@@ -3,9 +3,8 @@ import styles from './Game.module.css';
 
 export default (props)=>{
     const {path, label, core_path, core_name, crc32, db_name} = props;
-    const gameData = {path, label, core_path, core_name, crc32, db_name};
     return (
-        <div className={styles.container} onClick={()=>props.onClick(gameData)}>
+        <div className={styles.container} onClick={props.onClick}>
             <div className={styles.label}>{label}</div>
             <div className={styles.path}>{path}</div>
             <div className={styles.crc32}>{crc32}</div>
