@@ -1,68 +1,37 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## What?
 
-## Available Scripts
+This is a playlist mixer for [Retroarch](https://www.retroarch.com/) playlists (version 1.2 only, json format).
 
-In the project directory, you can run:
+It's designed for coping items from the left panel to the right panel, and to delete from the right panel with a single click.
 
-### `npm start`
+There is also a filter field at the bottom, so you can quickly find the game you're looking for.
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Why?
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+Retroarch has a playlist editor, but it doesn't allow you to copy items between playlists. Scanning directories creates playlists and there's a favorite list, but sometimes you want to make multiple playlists, for example: favorites in genre, in platform, era or your personal criteria which is not in any databases.
 
-### `npm test`
+I made this so I could pick and choose from the generated playlists into smaller, custom ones.
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## How?
 
-### `npm run build`
+* This project uses [React](https://reactjs.org/)
+* This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+* This project uses [react-state-events](https://www.npmjs.com/package/react-state-events) to lift state and coordinate data between components
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Future?
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+Things I would have liked to put in, but they didn't work out within the timeframe I had. Some I may get to, some look like too much work:
+* Drag and drop for playlist entries: none of this made it in.
+* Filter by crc, path, core name, core path: filter takes a type parameter, but only "label" is implemented and UI doesn't expose it.
+* Indexing for better, faster filtering: Indexes are created, but they are inadequate and left unused. I wanted case insensitivity, global matches and high performance.
+* A better color scheme: I didn't spend time thinking this one out.
+* Console: There's a textfield at the bottom which would tell you what is being done. This is because I had planned for more complex operations, as seen in the next items.
+* Overwrite destination, matching on label/path/crc: allows you to fix existing entries.
+* Use game core from game,playlist,DETECT: for cleaner core settings.
+* Set all playlist's core/core path: for cleaner core settings.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+I found you find this program useful.
 
-### `npm run eject`
+## License
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+MIT © [IndianaGeorge](https://github.com/IndianaGeorge)
