@@ -45,16 +45,16 @@ export default (props)=>{
         {
           filteredItems?
             filteredItems.map(
-              (game,index)=> (
+              (wrappedgame)=> (
                 <Game
-                  onClick={()=>props.onGameClick(game,index)}
-                  key={index}
-                  path={game.path}
-                  label={game.label}
-                  core_path={game.core_path}
-                  core_name={game.core_name}
-                  crc32={game.crc32}
-                  db_name={game.db_names}
+                  onClick={()=>props.onGameClick(wrappedgame.game,wrappedgame.index)}
+                  key={wrappedgame.index}
+                  path={wrappedgame.game.path}
+                  label={wrappedgame.game.label}
+                  core_path={wrappedgame.game.core_path}
+                  core_name={wrappedgame.game.core_name}
+                  crc32={wrappedgame.game.crc32}
+                  db_name={wrappedgame.game.db_names}
                 />
               )
             )
