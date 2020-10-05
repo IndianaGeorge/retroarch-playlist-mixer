@@ -22,7 +22,8 @@ export default ()=>{
 
   const clearFilter = ()=>{
     setFilter("");
-    sourceController.filter("label",filter);
+    sourceController.filter("label","");
+    targetController.filter("label","");
   }
   
   const updateFilter = filterText=>{
