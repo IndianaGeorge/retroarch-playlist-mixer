@@ -59,9 +59,9 @@ export default ()=>{
           <input onChange={onFilterChange} value={filter} className={styles.filterText} />
           <select value={filterType} onChange={onFilterTypeChange}>
             <option value="label">Label</option>
+            <option value="filename">Filename</option>
             <option value="crc32">CRC32</option>
             <option value="path">Full path</option>
-            <option value="filename">Filename</option>
           </select>
           <button onClick={clearFilter}>clear</button>
         </div>
