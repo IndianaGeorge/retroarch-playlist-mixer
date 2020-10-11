@@ -68,7 +68,7 @@ export default (props)=>{
 
       <div className={styles.buttonPanel}>
         <button onClick={Controller.empty.bind(Controller)}>reset</button>
-        <button onClick={()=>{save(JSON.stringify(playlist),filename)}}>export</button>
+        <button onClick={()=>{save(JSON.stringify(playlist,null,2),filename)}}>export</button>
       </div>
     </div>
   );
