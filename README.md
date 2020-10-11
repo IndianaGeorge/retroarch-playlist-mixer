@@ -25,13 +25,14 @@ I made this so I could pick and choose from the generated playlists into smaller
 
 Things I would have liked to put in, but they didn't work out within the timeframe I had. Some I may get to, some look like too much work:
 * Drag and drop for playlist entries: none of this made it in.
-* Filter by crc, path, core name, core path: filter takes a type parameter, but only "label" is implemented and UI doesn't expose it.
+* ~~Filter by crc, path, core name, core path: filter takes a type parameter, but only "label" is implemented and UI doesn't expose it.~~
 * ~~Indexing for better, faster filtering: Indexes are created, but they are inadequate and left unused. I wanted case insensitivity, global matches and high performance.~~
 * A better color scheme: I didn't spend time thinking this one out.
 * Console: There's a textfield at the bottom which would tell you what is being done. This is because I had planned for more complex operations, as seen in the next items.
 * Overwrite destination, matching on label/path/crc: allows you to fix existing entries.
 * Use game core from game,playlist,DETECT: for cleaner core settings.
 * Set all playlist's core/core path: for cleaner core settings.
+* Spinner while indexing: Big lists can take a few seconds to fully index.
 
 I found you find this program useful.
 

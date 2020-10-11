@@ -9,6 +9,7 @@ export default ()=>{
   const sourceController = useContext(sourceContext);
   const targetController = useContext(targetContext);
   const [filter,setFilter] = useState("");
+  const [filterType,setFilterType] = useState("label");
 
   const copyOnClick = (gameData,index)=>{
     targetController.add(gameData);
@@ -25,12 +26,24 @@ export default ()=>{
     sourceController.filter("label","");
     targetController.filter("label","");
   }
-  
-  const updateFilter = filterText=>{
-    setFilter(filterText.target.value);
-    sourceController.filter("label",filterText.target.value);
-    targetController.filter("label",filterText.target.value);
+
+  const onFilterTypeChange = newFilterType=>{
+    setFilterType(newFilterType.target.value);
+    if (filter!="") {
+      updateFilter(newFilterType.target.value,filter);
+    }
   }
+  
+  const onFilterChange = filterText=>{
+    setFilter(filterText.target.value);
+    updateFilter(filterType,filterText.target.value);
+  }
+
+  const updateFilter = (newFilterType,newFilter)=>{
+    sourceController.filter(newFilterType,newFilter);
+    targetController.filter(newFilterType,newFilter);    
+  }
+
   return (
     <div className={styles.App}>
       <header className={styles.header}>
@@ -42,7 +55,13 @@ export default ()=>{
       </div>
       <div className={styles.textPanel}>
         <div className={styles.filter}>
-          <input onChange={updateFilter} value={filter} className={styles.filterText} />
+          <input onChange={onFilterChange} value={filter} className={styles.filterText} />
+          <select value={filterType} onChange={onFilterTypeChange}>
+            <option value="label">Label</option>
+            <option value="crc32">CRC32</option>
+            <option value="path">Full path</option>
+            <option value="filename">Filename</option>
+          </select>
           <button onClick={clearFilter}>clear</button>
         </div>
         <textarea rows="6" disabled value="console"></textarea>

@@ -39,58 +39,79 @@ export default class PlaylistController {
         return JSON.parse(JSON.stringify(emptyPlaylist));
     }
 
+    tokenize(text) {
+        return [...new Set(text.toLowerCase().match(/[a-z0-9]+/g).map((token)=>token.split("").map((c,i)=>token.slice(i)).map((rw)=>rw.split("").map((c2,i2)=>rw.slice(0,i2+1)))).flat(2))];
+    }
+
+    storeInRefs(index,tokens,game,position) {
+        tokens.forEach(rl=>index[rl]?index[rl].push({index: position,game: game}):index[rl]=[{index: position,game: game}])
+    }
+
     index() {
         if (this.playlist && this.playlist.items) {
             this.nameIndex = {};
             this.crcIndex = {};
             this.pathIndex = {};
+            this.filenameIndex = {};
             this.playlist.items.forEach((game,index)=>{
-                [...new Set(
-                    game.label.toLowerCase().match(/[a-z0-9]+/g).map((token)=>token.split("").map((c,i)=>token.slice(i)).map((rw)=>rw.split("").map((c2,i2)=>rw.slice(0,i2+1)))).flat(2))
-                ].forEach(rl=>this.nameIndex[rl]?this.nameIndex[rl].push({index: index,game: game}):this.nameIndex[rl]=[{index: index,game: game}]);
-                this.crcIndex[game.crc32] = game;
-                this.pathIndex[game.path] = game;
+                if (game.label) {
+                    this.storeInRefs(this.nameIndex,this.tokenize(game.label),game,index);
+                }
+                if (game.crc32) {
+                    const crc = game.crc32.toLowerCase().match(/^[a-z0-9]+/);
+                    if (crc.length>0) {
+                        this.storeInRefs(this.crcIndex,this.tokenize(crc[0]),game,index);
+                    }
+                }
+                if (game.path && game.path.length>0) {
+                    this.storeInRefs(this.pathIndex,this.tokenize(game.path),game,index);
+                    this.storeInRefs(this.filenameIndex,this.tokenize(game.path.match(/([^\\#]+)\....$/)[1]),game,index);
+                }
             });
         }
+    }
+
+    applyFilter(index,tokens) {
+        this.filteredItems = [];
+        tokens.forEach(token=>{
+            if (index[token]) {
+                if (this.filteredItems.length>0) {
+                    this.filteredItems = this.filteredItems.filter(w=>{return index[token].filter(i=>(w.index===i.index)).length>0;});
+                }
+                else {
+                    this.filteredItems = [ ...index[token] ];
+                }
+            }
+        });
+        this.filteredItems = this.filteredItems.map(wrapped=>wrapped.index);
+        this.filteredItems = [...new Set(this.filteredItems)];
+        this.filteredItems = this.filteredItems.map(index=>({game:this.playlist.items[index], index: index}));
     }
 
     filter(type, filter) {
         const tokens = filter.toLowerCase().match(/[a-z0-9]+/g)||[];
         if (this.playlist && this.playlist.items) {
-            switch(type){
-                case "label":
-                    if (tokens.length>0) {
-                        this.filteredItems = [];
-                        tokens.forEach(token=>{
-                            if (this.nameIndex[token]) {
-                                if (this.filteredItems.length>0) {
-                                    this.filteredItems = this.filteredItems.filter(w=>{return this.nameIndex[token].filter(i=>(w.index===i.index)).length>0;});
-                                }
-                                else {
-                                    this.filteredItems = [ ...this.nameIndex[token] ];
-                                }
-                            }
-                        });
-                        this.filteredItems = this.filteredItems.map(wrapped=>wrapped.index);
-                        this.filteredItems = [...new Set(this.filteredItems)];
-                        this.filteredItems = this.filteredItems.map(index=>({game:this.playlist.items[index], index: index}))
-                    }
-                    else {
-                        this.filteredItems = this.playlist.items.map((game,index)=>({index: index, game: game}));
-                    }
-                    this.filteredItemsEvents.publish([...this.filteredItems]);
-                    break;
-                case "crc32":
-                    this.filteredItems = this.playlist.items.filter(game=>game.crc32.indexOf(filter)>-1);
-                    this.filteredItemsEvents.publish(this.filteredItems);
-                    break;
-                case "path":
-                    this.filteredItems = this.playlist.items.filter(game=>game.path.indexOf(filter)>-1);
-                    this.filteredItemsEvents.publish(this.filteredItems);
-                    break;
-                default:
-                    break;
+            if (tokens.length>0) {
+                switch(type) {
+                    case "label":
+                        this.applyFilter(this.nameIndex,tokens);
+                        break;
+                    case "crc32":
+                        this.applyFilter(this.crcIndex,tokens);
+                        break;
+                    case "path":
+                        this.applyFilter(this.pathIndex,tokens);
+                        break;
+                    case "filename":
+                        this.applyFilter(this.filenameIndex,tokens);
+                    default:
+                        break;
+                }
             }
+            else {
+                this.filteredItems = this.playlist.items.map((game,index)=>({index: index, game: game}));
+            }
+            this.filteredItemsEvents.publish([...this.filteredItems]);
         }
     }
 
