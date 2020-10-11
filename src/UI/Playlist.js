@@ -1,7 +1,8 @@
-import React, { useContext, useCallback } from 'react';
+import React, { useState, useContext, useCallback } from 'react';
 import { useStateEvents } from 'react-state-events';
 import { useDropzone } from 'react-dropzone';
 import FileSaver from 'file-saver';
+import LoadOverlay from 'react-loading-retry-overlay';
 
 import styles from './Playlist.module.css';
 
@@ -17,9 +18,11 @@ export default (props)=>{
   const [playlist] = useStateEvents(null, Controller.getPlaylistEvents());
   const [filteredItems] = useStateEvents(null, Controller.getfilteredItemsEvents());
   const [filename] = useStateEvents(null, Controller.getFilenameEvents());
+  const [loading,setLoading] = useState(false);
 
   const onDrop = useCallback((acceptedFiles) => {
     if (acceptedFiles && acceptedFiles.length>0) {
+      setLoading(true);
       const file = acceptedFiles[0];
       const reader = new FileReader()
   
@@ -29,6 +32,7 @@ export default (props)=>{
       // Do whatever you want with the file contents
         const text = reader.result
         Controller.set(JSON.parse(text),file.path);
+        setLoading(false);
       }
       reader.readAsText(file)  
     }
@@ -41,7 +45,7 @@ export default (props)=>{
       <div className={styles.filename}>
         {filename}
       </div>
-      <div className={styles.content}>
+      <LoadOverlay className={styles.content} loading={loading}>
         {
           filteredItems?
             filteredItems.map(
@@ -64,7 +68,7 @@ export default (props)=>{
               <div className={styles.dropzoneTitle}>Drop playlist here!</div>
             </div>
         }
-      </div>
+      </LoadOverlay>
 
       <div className={styles.buttonPanel}>
         <button onClick={Controller.empty.bind(Controller)}>reset</button>

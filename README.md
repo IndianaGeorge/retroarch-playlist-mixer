@@ -32,7 +32,7 @@ Things I would have liked to put in, but they didn't work out within the timefra
 * Overwrite destination, matching on label/path/crc: allows you to fix existing entries.
 * Use game core from game,playlist,DETECT: for cleaner core settings.
 * Set all playlist's core/core path: for cleaner core settings.
-* Spinner while indexing: Big lists can take a few seconds to fully index.
+* ~~Spinner while indexing: Big lists can take a few seconds to fully index.~~
 
 I found you find this program useful.
 
