@@ -12,8 +12,10 @@ export default ()=>{
   const [filterType,setFilterType] = useState("label");
 
   const copyOnClick = (gameData,index)=>{
-    targetController.add(gameData);
-    targetController.filter("label", filter);
+    if (targetController.playlist) {
+      targetController.add(gameData);
+      targetController.filter("label", filter);  
+    }
   }
 
   const deleteOnClick = (gameData,index)=>{
@@ -23,8 +25,7 @@ export default ()=>{
 
   const clearFilter = ()=>{
     setFilter("");
-    sourceController.filter("label","");
-    targetController.filter("label","");
+    updateFilter(filterType,"");
   }
 
   const onFilterTypeChange = newFilterType=>{
@@ -33,7 +34,7 @@ export default ()=>{
       updateFilter(newFilterType.target.value,filter);
     }
   }
-  
+
   const onFilterChange = filterText=>{
     setFilter(filterText.target.value);
     updateFilter(filterType,filterText.target.value);
