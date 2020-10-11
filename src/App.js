@@ -29,7 +29,7 @@ export default ()=>{
 
   const onFilterTypeChange = newFilterType=>{
     setFilterType(newFilterType.target.value);
-    if (filter!="") {
+    if (filter!=="") {
       updateFilter(newFilterType.target.value,filter);
     }
   }

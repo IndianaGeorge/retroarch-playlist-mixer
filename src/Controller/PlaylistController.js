@@ -104,6 +104,7 @@ export default class PlaylistController {
                         break;
                     case "filename":
                         this.applyFilter(this.filenameIndex,tokens);
+                        break;
                     default:
                         break;
                 }
