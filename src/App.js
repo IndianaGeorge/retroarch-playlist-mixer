@@ -14,13 +14,22 @@ export default ()=>{
   const copyOnClick = (gameData,index)=>{
     if (targetController.playlist) {
       targetController.add(gameData);
-      targetController.filter("label", filter);  
+      targetController.filter(filterType, filter);
+    }
+  }
+
+  const copyAll = ()=>{
+    if (sourceController.playlist) {
+      sourceController.playlist.items.forEach(gameData => {
+        targetController.add(gameData);
+      });
+      targetController.filter(filterType, filter);
     }
   }
 
   const deleteOnClick = (gameData,index)=>{
     targetController.delete(index);
-    targetController.filter("label", filter);
+    targetController.filter(filterType, filter);
   }
 
   const clearFilter = ()=>{
@@ -47,6 +56,7 @@ export default ()=>{
 
   const sourceButtons={
     Reset: sourceController.empty.bind(sourceController),
+    "Copy all": copyAll,
   }
 
   const targetButtons={

@@ -57,25 +57,27 @@ export default class PlaylistController {
         tokens.forEach(rl=>index[rl]?index[rl].push(wrap.index):index[rl]=[wrap.index])
     }
 
+    indexSingle(wrap) {
+        if (wrap.game.label) {
+            this.storeInRefs(this.nameIndex,this.tokenize(wrap.game.label),wrap);
+        }
+        if (wrap.game.crc32) {
+            const crc = wrap.game.crc32.toLowerCase().match(/^[a-z0-9]+/);
+            if (crc.length>0) {
+                this.storeInRefs(this.crcIndex,this.tokenize(crc[0]),wrap);
+            }
+        }
+        if (wrap.game.path && wrap.game.path.length>0) {
+            this.storeInRefs(this.pathIndex,this.tokenize(wrap.game.path),wrap);
+            this.storeInRefs(this.filenameIndex,this.tokenize(wrap.game.path.match(/([^\\#]+)\....$/)[1]),wrap);
+        }
+    }
+
     index() {
         if (this.playlist && this.playlist.items) {
             this.clearIndexes();
             this.allItems = this.playlist.items.map((game,index)=>({index: index, game: game}));
-            this.allItems.forEach(wrap=>{
-                if (wrap.game.label) {
-                    this.storeInRefs(this.nameIndex,this.tokenize(wrap.game.label),wrap);
-                }
-                if (wrap.game.crc32) {
-                    const crc = wrap.game.crc32.toLowerCase().match(/^[a-z0-9]+/);
-                    if (crc.length>0) {
-                        this.storeInRefs(this.crcIndex,this.tokenize(crc[0]),wrap);
-                    }
-                }
-                if (wrap.game.path && wrap.game.path.length>0) {
-                    this.storeInRefs(this.pathIndex,this.tokenize(wrap.game.path),wrap);
-                    this.storeInRefs(this.filenameIndex,this.tokenize(wrap.game.path.match(/([^\\#]+)\....$/)[1]),wrap);
-                }
-            });
+            this.allItems.forEach(wrap=>this.indexSingle(wrap));
         }
     }
 
@@ -156,8 +158,11 @@ export default class PlaylistController {
     
     add(game) {
         this.playlist = JSON.parse(JSON.stringify(this.playlist));
-        this.playlist.items.push({...game});
-        this.index();
+        const gameCopy = {...game};
+        const wrap = {index: this.playlist.items.length, game: gameCopy};
+        this.allItems.push(wrap);
+        this.playlist.items.push(gameCopy);
+        this.indexSingle(wrap);
         this.filter("label","");
         this.publish();
     }
