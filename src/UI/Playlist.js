@@ -1,17 +1,11 @@
 import React, { useState, useContext, useCallback } from 'react';
 import { useStateEvents } from 'react-state-events';
 import { useDropzone } from 'react-dropzone';
-import FileSaver from 'file-saver';
 import LoadOverlay from 'react-loading-retry-overlay';
 
 import styles from './Playlist.module.css';
 
 import Game from './Game'
-
-const save=(text,filename)=>{
-  var blob = new Blob([text], {type: "text/plain;charset=utf-8"});
-  FileSaver.saveAs(blob, filename);
-}
 
 export default (props)=>{
   const Controller = useContext(props.controller);
@@ -72,7 +66,7 @@ export default (props)=>{
 
       <div className={styles.buttonPanel}>
         <button onClick={Controller.empty.bind(Controller)}>reset</button>
-        <button onClick={()=>{save(JSON.stringify(playlist,null,2),filename)}}>export</button>
+        <button onClick={Controller.exportPlaylist.bind(Controller)}>export</button>
       </div>
     </div>
   );

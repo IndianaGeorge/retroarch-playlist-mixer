@@ -1,4 +1,5 @@
 import { StateEvents } from 'react-state-events'
+import FileSaver from 'file-saver';
 
 const emptyPlaylist = {
     version: "1.2",
@@ -39,6 +40,15 @@ export default class PlaylistController {
         return JSON.parse(JSON.stringify(emptyPlaylist));
     }
 
+    exportPlaylist() {
+        console.log("export called");
+        if (this.playlist) {
+            const text = JSON.stringify(this.playlist,null,2);
+            var blob = new Blob([text], {type: "text/plain;charset=utf-8"});
+            FileSaver.saveAs(blob, this.filename);    
+        }
+    }
+      
     tokenize(text) {
         return [...new Set(text.toLowerCase().match(/[a-z0-9]+/g).map((token)=>token.split("").map((c,i)=>token.slice(i)).map((rw)=>rw.split("").map((c2,i2)=>rw.slice(0,i2+1)))).flat(2))];
     }
