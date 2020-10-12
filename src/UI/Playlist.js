@@ -9,7 +9,6 @@ import Game from './Game'
 
 export default (props)=>{
   const Controller = useContext(props.controller);
-  const [playlist] = useStateEvents(null, Controller.getPlaylistEvents());
   const [filteredItems] = useStateEvents(null, Controller.getfilteredItemsEvents());
   const [filename] = useStateEvents(null, Controller.getFilenameEvents());
   const [loading,setLoading] = useState(false);
@@ -65,8 +64,13 @@ export default (props)=>{
       </LoadOverlay>
 
       <div className={styles.buttonPanel}>
-        <button onClick={Controller.empty.bind(Controller)}>reset</button>
-        <button onClick={Controller.exportPlaylist.bind(Controller)}>export</button>
+        {
+          Object.keys(props.buttons).map(
+            (key)=>(
+              <button key={key} onClick={props.buttons[key]}>{key}</button>
+            )
+          )
+        }
       </div>
     </div>
   );

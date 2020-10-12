@@ -45,14 +45,23 @@ export default ()=>{
     targetController.filter(newFilterType,newFilter);    
   }
 
+  const sourceButtons={
+    Reset: sourceController.empty.bind(sourceController),
+  }
+
+  const targetButtons={
+    Reset: targetController.empty.bind(targetController),
+    Export: targetController.exportPlaylist.bind(targetController),
+  }
+
   return (
     <div className={styles.App}>
       <header className={styles.header}>
         <h1 className={styles.title}>Retroarch playlist mixer</h1>
       </header>
       <div className={styles.playlistPanel}>
-        <Playlist controller={sourceContext} onGameClick={copyOnClick}/>
-        <Playlist controller={targetContext} onGameClick={deleteOnClick}/>
+        <Playlist controller={sourceContext} onGameClick={copyOnClick} buttons={sourceButtons}/>
+        <Playlist controller={targetContext} onGameClick={deleteOnClick} buttons={targetButtons}/>
       </div>
       <div className={styles.textPanel}>
         <div className={styles.filter}>
