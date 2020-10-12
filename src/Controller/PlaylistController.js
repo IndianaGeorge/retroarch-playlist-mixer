@@ -53,8 +53,8 @@ export default class PlaylistController {
         return [...new Set(text.toLowerCase().match(/[a-z0-9]+/g).map((token)=>token.split("").map((c,i)=>token.slice(i)).map((rw)=>rw.split("").map((c2,i2)=>rw.slice(0,i2+1)))).flat(2))];
     }
 
-    storeInRefs(index,tokens,game,position) {
-        tokens.forEach(rl=>index[rl]?index[rl].push({index: position,game: game}):index[rl]=[{index: position,game: game}])
+    storeInRefs(index,tokens,wrap) {
+        tokens.forEach(rl=>index[rl]?index[rl].push(wrap.index):index[rl]=[wrap.index])
     }
 
     index() {
@@ -63,19 +63,20 @@ export default class PlaylistController {
             this.crcIndex = {};
             this.pathIndex = {};
             this.filenameIndex = {};
-            this.playlist.items.forEach((game,index)=>{
-                if (game.label) {
-                    this.storeInRefs(this.nameIndex,this.tokenize(game.label),game,index);
+            this.allItems = this.playlist.items.map((game,index)=>({index: index, game: game}));
+            this.allItems.forEach(wrap=>{
+                if (wrap.game.label) {
+                    this.storeInRefs(this.nameIndex,this.tokenize(wrap.game.label),wrap);
                 }
-                if (game.crc32) {
-                    const crc = game.crc32.toLowerCase().match(/^[a-z0-9]+/);
+                if (wrap.game.crc32) {
+                    const crc = wrap.game.crc32.toLowerCase().match(/^[a-z0-9]+/);
                     if (crc.length>0) {
-                        this.storeInRefs(this.crcIndex,this.tokenize(crc[0]),game,index);
+                        this.storeInRefs(this.crcIndex,this.tokenize(crc[0]),wrap);
                     }
                 }
-                if (game.path && game.path.length>0) {
-                    this.storeInRefs(this.pathIndex,this.tokenize(game.path),game,index);
-                    this.storeInRefs(this.filenameIndex,this.tokenize(game.path.match(/([^\\#]+)\....$/)[1]),game,index);
+                if (wrap.game.path && wrap.game.path.length>0) {
+                    this.storeInRefs(this.pathIndex,this.tokenize(wrap.game.path),wrap);
+                    this.storeInRefs(this.filenameIndex,this.tokenize(wrap.game.path.match(/([^\\#]+)\....$/)[1]),wrap);
                 }
             });
         }
@@ -86,16 +87,15 @@ export default class PlaylistController {
         tokens.forEach(token=>{
             if (index[token]) {
                 if (this.filteredItems.length>0) {
-                    this.filteredItems = this.filteredItems.filter(w=>{return index[token].filter(i=>(w.index===i.index)).length>0;});
+                    this.filteredItems = this.filteredItems.filter(w=>{return index[token].filter(i=>(w===i)).length>0;});
                 }
                 else {
                     this.filteredItems = [ ...index[token] ];
                 }
             }
         });
-        this.filteredItems = this.filteredItems.map(wrapped=>wrapped.index);
         this.filteredItems = [...new Set(this.filteredItems)];
-        this.filteredItems = this.filteredItems.map(index=>({game:this.playlist.items[index], index: index}));
+        this.filteredItems = this.filteredItems.map(index=>(this.allItems[index]));
     }
 
     filter(type, filter) {
@@ -120,9 +120,9 @@ export default class PlaylistController {
                 }
             }
             else {
-                this.filteredItems = this.playlist.items.map((game,index)=>({index: index, game: game}));
+                this.filteredItems = this.allItems;
             }
-            this.filteredItemsEvents.publish([...this.filteredItems]);
+            this.filteredItemsEvents.publish(this.filteredItems);
         }
     }
 
