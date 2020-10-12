@@ -127,7 +127,7 @@ export default class PlaylistController {
                 }
             }
             else {
-                this.filteredItems = this.allItems;
+                this.filteredItems = [...this.allItems];
             }
             this.filteredItemsEvents.publish(this.filteredItems);
         }
