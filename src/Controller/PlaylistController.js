@@ -59,10 +59,7 @@ export default class PlaylistController {
 
     index() {
         if (this.playlist && this.playlist.items) {
-            this.nameIndex = {};
-            this.crcIndex = {};
-            this.pathIndex = {};
-            this.filenameIndex = {};
+            this.clearIndexes();
             this.allItems = this.playlist.items.map((game,index)=>({index: index, game: game}));
             this.allItems.forEach(wrap=>{
                 if (wrap.game.label) {
@@ -80,6 +77,14 @@ export default class PlaylistController {
                 }
             });
         }
+    }
+
+    clearIndexes() {
+        this.nameIndex = {};
+        this.crcIndex = {};
+        this.pathIndex = {};
+        this.filenameIndex = {};
+        this.allItems = [];
     }
 
     applyFilter(index,tokens) {
@@ -136,6 +141,7 @@ export default class PlaylistController {
         this.playlist = null;
         this.filteredItems = null;
         this.filename = null;
+        this.clearIndexes();
         this.publish();
     }
 
