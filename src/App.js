@@ -54,6 +54,10 @@ export default ()=>{
     targetController.filter(newFilterType,newFilter);    
   }
 
+  const newTargetPlaylist = ()=>{
+    targetController.set(targetController.getEmptyPlaylist(),"New Retroarch playlist.lpl");
+  }
+
   const sourceButtons={
     Reset: sourceController.empty.bind(sourceController),
     "Copy all": copyAll,
@@ -61,6 +65,7 @@ export default ()=>{
 
   const targetButtons={
     Reset: targetController.empty.bind(targetController),
+    New: newTargetPlaylist,
     Export: targetController.exportPlaylist.bind(targetController),
   }
 
