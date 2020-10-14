@@ -63,9 +63,70 @@ export default ()=>{
     "Copy all": copyAll,
   }
 
+  const fixAll = ()=>{
+    const fixType="crc32";
+    let list;
+    switch (fixType) {
+      case "label":
+        list = targetController.filteredItems.map(wrap=>wrap.game.label);
+        break;
+      case "filename":
+        list = targetController.filteredItems.map(wrap=>wrap.game.path.match(/([^\\#]+\....)$/)[1]);
+        break;
+      case "crc32":
+        list = targetController.filteredItems.map(wrap=>wrap.game.crc32);
+        break;
+      case "path":
+        list = targetController.filteredItems.map(wrap=>wrap.game.path);
+        break;
+      default:
+        list = [];
+        break;
+    }
+    list.forEach(i=>{
+      switch (fixType) {
+        case "label":
+          if (sourceController.fullLabel[i] && sourceController.fullLabel[i].length===1) {
+            while (targetController.fullLabel[i] && targetController.fullLabel[i].length>0) {
+              targetController.delete(targetController.fullLabel[i][0].index);
+            }
+            targetController.add(sourceController.fullLabel[i][0].game);
+          }
+          break;
+        case "filename":
+          if (sourceController.fullFilename[i] && sourceController.fullFilename[i].length===1) {
+            while (targetController.fullFilename[i] && targetController.fullFilename[i].length>0) {
+              targetController.delete(targetController.fullFilename[i][0].index);
+            }
+            targetController.add(sourceController.fullFilename[i][0].game);
+          }
+          break;
+        case "crc32":
+          if (sourceController.fullCrc[i] && sourceController.fullCrc[i].length===1) {
+            while (targetController.fullCrc[i] && targetController.fullCrc[i].length>0) {
+              targetController.delete(targetController.fullCrc[i][0].index);
+            }
+            targetController.add(sourceController.fullCrc[i][0].game);
+          }
+          break;
+        case "path":
+          if (sourceController.fullPath[i] && sourceController.fullPath[i].length===1) {
+            while (targetController.fullPath[i] && targetController.fullPath[i].length>0) {
+              targetController.delete(targetController.fullPath[i][0].index);
+            }
+            targetController.add(sourceController.fullPath[i][0].game);
+          }
+          break;
+        default:
+          break;
+      }
+    });
+  }
+
   const targetButtons={
     Reset: targetController.empty.bind(targetController),
-    New: newTargetPlaylist,
+    "New": newTargetPlaylist,
+    "Fix visible by CRC": fixAll,
     Export: targetController.exportPlaylist.bind(targetController),
   }
 

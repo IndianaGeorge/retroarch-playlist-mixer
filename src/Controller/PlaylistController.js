@@ -41,7 +41,6 @@ export default class PlaylistController {
     }
 
     exportPlaylist() {
-        console.log("export called");
         if (this.playlist) {
             const text = JSON.stringify(this.playlist,null,2);
             var blob = new Blob([text], {type: "text/plain;charset=utf-8"});
@@ -60,16 +59,44 @@ export default class PlaylistController {
     indexSingle(wrap) {
         if (wrap.game.label) {
             this.storeInRefs(this.nameIndex,this.tokenize(wrap.game.label),wrap);
+            if (this.fullLabel[wrap.game.label]) {
+                this.fullLabel[wrap.game.label].push(wrap);
+            }
+            else {
+                this.fullLabel[wrap.game.label] = [wrap];
+            }
         }
         if (wrap.game.crc32) {
             const crc = wrap.game.crc32.toLowerCase().match(/^[a-z0-9]+/);
             if (crc.length>0) {
                 this.storeInRefs(this.crcIndex,this.tokenize(crc[0]),wrap);
             }
+            if (this.fullCrc[wrap.game.crc32]) {
+                this.fullCrc[wrap.game.crc32].push(wrap);
+            }
+            else {
+                this.fullCrc[wrap.game.crc32] = [wrap];
+            }
+
         }
         if (wrap.game.path && wrap.game.path.length>0) {
             this.storeInRefs(this.pathIndex,this.tokenize(wrap.game.path),wrap);
-            this.storeInRefs(this.filenameIndex,this.tokenize(wrap.game.path.match(/([^\\#]+)\....$/)[1]),wrap);
+            if (this.fullPath[wrap.game.path]) {
+                this.fullPath[wrap.game.path].push(wrap);
+            }
+            else {
+                this.fullPath[wrap.game.path] = [wrap];
+            }
+
+            const filename = wrap.game.path.match(/([^\\#]+\....)$/)[1];
+            this.storeInRefs(this.filenameIndex,this.tokenize(filename),wrap);
+            if (this.fullFilename[filename]) {
+                this.fullFilename[filename].push(wrap);
+            }
+            else {
+                this.fullFilename[filename] = [wrap];
+            }
+
         }
     }
 
@@ -87,6 +114,10 @@ export default class PlaylistController {
         this.pathIndex = {};
         this.filenameIndex = {};
         this.allItems = [];
+        this.fullLabel = {};
+        this.fullCrc = {};
+        this.fullPath = {};
+        this.fullFilename = {};
     }
 
     applyFilter(index,tokens) {
@@ -150,7 +181,6 @@ export default class PlaylistController {
     set(playlist,filename) {
         this.filename = filename;
         this.playlist = JSON.parse(JSON.stringify(playlist));
-        //this.filteredItems = [...this.playlist.items];
         this.index();
         this.filter("label","");
         this.publish();
