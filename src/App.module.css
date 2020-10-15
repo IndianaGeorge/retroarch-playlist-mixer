@@ -42,3 +42,16 @@
 .filterText {
   flex-grow: 1;
 }
+
+h4 {
+  margin: 0;
+  margin-left: 1em;
+}
+
+ul {
+  margin: 0;
+  margin-left: 2em;
+  list-style-type: none;
+  padding: 0;
+  margin-bottom: 1em;
+}

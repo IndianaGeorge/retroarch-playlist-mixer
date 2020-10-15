@@ -10,7 +10,24 @@ export default ()=>{
   const targetController = useContext(targetContext);
   const [filter,setFilter] = useState("");
   const [filterType,setFilterType] = useState("label");
-
+  const [changeCoreOnCopy,setChangeCoreOnCopy] = useState(false);
+  const [deduceLabelOnCopy,setDeduceLabelOnCopy] = useState(false);
+  const [changeBasePathOnCopy,setChangeBasePathOnCopy] = useState(false);
+  const [coreSourceOnCopy,setCoreSourceOnCopy] = useState("detect");
+  const [labelCheckOnCopy,setLabelCheckOnCopy] = useState("");
+  const [basePathOnCopy,setBasePathOnCopy] = useState("C:\\");
+  const [changeCoreOnFix,setChangeCoreOnFix] = useState(false);
+  const [pickOnlyOnFix,setPickOnlyOnFix] = useState(false);
+  const [appendToLabelOnFix,setAppendToLabelOnFix] = useState(false);
+  const [changeBasePathOnFix,setChangeBasePathOnFix] = useState(false);
+  const [coreSourceOnFix,setCoreSourceOnFix] = useState("detect");
+  const [pickOnlyOnFixType,setPickOnlyTypeOnFix] = useState("label");
+  const [pickOnlyOnFixSpec,setPickOnlyOnFixSpec] = useState("");
+  const [appendToLabelOnFixText,setAppendToLabelOnFixText] = useState("(fixed)");
+  const [changeBasePathOnFixPath,setChangeBasePathOnFixPath] = useState("C:\\");
+  const [copyOptsVisible,setCopyOptsVisible] = useState(false);
+  const [fixOptsVisible,setFixOptsVisible] = useState(false);
+  
   const copyOnClick = (gameData,index)=>{
     if (targetController.playlist) {
       targetController.add(gameData);
@@ -52,6 +69,71 @@ export default ()=>{
   const updateFilter = (newFilterType,newFilter)=>{
     sourceController.filter(newFilterType,newFilter);
     targetController.filter(newFilterType,newFilter);    
+  }
+
+  const onChangeChangeCoreOnCopy = (newChangeCoreOnCopy)=>{
+    setChangeCoreOnCopy(newChangeCoreOnCopy.target.checked);
+  }
+
+  const onChangeDeduceLabelOnCopy = (newDeduceLabelOnCopy)=>{
+    setDeduceLabelOnCopy(newDeduceLabelOnCopy.target.checked);
+  }
+
+  const onChangeChangeBasePathOnCopy = (newChangeBasePathOnCopy)=>{
+    setChangeBasePathOnCopy(newChangeBasePathOnCopy.target.checked);
+  }
+
+  const onChangeCoreSourceOnCopy = (newCoreSourceOnCopy)=>{
+    setCoreSourceOnCopy(newCoreSourceOnCopy.target.value);
+  }
+
+  const onChangeLabelCheckOnCopy = (newLabelCheckOnCopy)=>{
+    setLabelCheckOnCopy(newLabelCheckOnCopy.target.value);
+  }
+
+  const onChangeBasePathOnCopy = (newBasePathOnCopy)=>{
+    setBasePathOnCopy(newBasePathOnCopy.target.value);
+  }
+
+  const onChangeChangeCoreOnFix = (newChangeCoreOnFix)=>{
+    setChangeCoreOnFix(newChangeCoreOnFix.target.checked);
+  }
+  const onChangePickOnlyOnFix = (newPickOnlyOnFix)=>{
+    setPickOnlyOnFix(newPickOnlyOnFix.target.checked);
+  }
+  const onChangeAppendToLabelOnFix = (newAppendToLabelOnFix)=>{
+    setAppendToLabelOnFix(newAppendToLabelOnFix.target.checked);
+  }
+  const onChangeChangeBasePathOnFix = (newChangeBasePathOnFix)=>{
+    setChangeBasePathOnFix(newChangeBasePathOnFix.target.checked);
+  }
+
+  const onChangeCoreSourceOnFix = (newCoreSourceOnFix)=>{
+    setCoreSourceOnFix(newCoreSourceOnFix.target.value);
+  }
+
+  const onChangePickOnlyOnFixType = (newPickOnlyOnFixType)=>{
+    setPickOnlyTypeOnFix(newPickOnlyOnFixType.target.value);
+  }
+
+  const onChangePickOnlyOnFixSpec = (newPickOnlyOnFixSpec)=>{
+    setPickOnlyOnFixSpec(newPickOnlyOnFixSpec.target.value);
+  }
+
+  const onChangeAppendToLabelOnFixText = (newAppendToLabelOnFixText)=>{
+    setAppendToLabelOnFixText(newAppendToLabelOnFixText.target.value);
+  }
+
+  const onChangeChangeBasePathOnFixPath = (newChangeBasePathOnFixPath)=>{
+    setChangeBasePathOnFixPath(newChangeBasePathOnFixPath);
+  }
+
+  const onClickCopyOpts = ()=>{
+    setCopyOptsVisible(!copyOptsVisible);
+  }
+
+  const onClickFixOpts = ()=>{
+    setFixOptsVisible(!fixOptsVisible);
   }
 
   const newTargetPlaylist = ()=>{
@@ -139,9 +221,59 @@ export default ()=>{
         <Playlist controller={sourceContext} onGameClick={copyOnClick} buttons={sourceButtons}/>
         <Playlist controller={targetContext} onGameClick={deleteOnClick} buttons={targetButtons}/>
       </div>
+      <div>
+        <h4 onClick={onClickCopyOpts}>({copyOptsVisible?'-':'+'})When copying:</h4>
+        {
+          copyOptsVisible?(
+            <ul>
+              <li><input type="checkbox" checked={changeCoreOnCopy} onChange={onChangeChangeCoreOnCopy} />
+                Change core name and path to <select value={coreSourceOnCopy} onChange={onChangeCoreSourceOnCopy}>
+                  <option value="sourcePlaylist">Source Playlist default core</option>
+                  <option value="targetPlaylist">Target Playlist default core</option>
+                  <option value="detect">DETECT</option>
+                </select>
+              </li>
+              <li><input type="checkbox" checked={deduceLabelOnCopy} onChange={onChangeDeduceLabelOnCopy} />
+                If label is <input type="text" value={labelCheckOnCopy} onChange={onChangeLabelCheckOnCopy}/>, deduce label from filename
+              </li>
+              <li><input type="checkbox" checked={changeBasePathOnCopy} onChange={onChangeChangeBasePathOnCopy} />
+                change base path to <input type="text" value={basePathOnCopy} onChange={onChangeBasePathOnCopy}/>
+              </li>
+            </ul>
+          ):null
+        }
+
+        <h4 onClick={onClickFixOpts}>({fixOptsVisible?'-':'+'})When fixing:</h4>
+        {
+          fixOptsVisible?(
+            <ul>
+              <li><input type="checkbox" checked={changeCoreOnFix} onChange={onChangeChangeCoreOnFix} />
+                Change core name/path to <select value={coreSourceOnFix} onChange={onChangeCoreSourceOnFix}>
+                  <option value="sourcePlaylist">Source Playlist default core</option>
+                  <option value="targetPlaylist">Target Playlist default core</option>
+                  <option value="detect">DETECT</option>
+                </select>
+              </li>
+              <li><input type="checkbox" checked={pickOnlyOnFix} onChange={onChangePickOnlyOnFix} />
+                pick only entries with <select value={pickOnlyOnFixType} onChange={onChangePickOnlyOnFixType}>
+                  <option value="label">label</option>
+                  <option value="crc">crc</option>
+                  <option value="basePath">base path</option>
+                </select> matching <input type="text" value={pickOnlyOnFixSpec} onChange={onChangePickOnlyOnFixSpec}/>
+              </li>
+              <li><input type="checkbox" checked={appendToLabelOnFix} onChange={onChangeAppendToLabelOnFix} />
+                Append <input type="text" value={appendToLabelOnFixText} onChange={onChangeAppendToLabelOnFixText}/> to label
+              </li>
+              <li><input type="checkbox" checked={changeBasePathOnFix} onChange={onChangeChangeBasePathOnFix} />
+                change base path to <input type="text" value={changeBasePathOnFixPath} onChange={onChangeChangeBasePathOnFixPath}/>
+              </li>
+            </ul>
+          ):null
+        }
+      </div>
       <div className={styles.textPanel}>
         <div className={styles.filter}>
-          <input onChange={onFilterChange} value={filter} className={styles.filterText} />
+          Filter visible by <input onChange={onFilterChange} value={filter} className={styles.filterText} />
           <select value={filterType} onChange={onFilterTypeChange}>
             <option value="label">Label</option>
             <option value="filename">Filename</option>
