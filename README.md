@@ -41,11 +41,13 @@ Things I would have liked to put in, but they didn't work out within the timefra
 * ~~Indexing for better, faster filtering: Indexes are created, but they are inadequate and left unused. I wanted case insensitivity, global matches and high performance.~~
 * A better color scheme: I didn't spend time thinking this one out.
 * Console: There's a textfield at the bottom which would tell you what is being done. This is because I had planned for more complex operations, as seen in the next items.
-* Overwrite destination, matching on label/path/crc: allows you to fix existing entries.
-* Use game core from game,playlist,DETECT: for cleaner core settings.
-* Set all playlist's core/core path: for cleaner core settings.
+* ~~Overwrite destination, matching on label/path/crc: allows you to fix existing entries.~~
+* ~~Use game core from game,playlist,DETECT: for cleaner core settings.~~
+* ~~Set all playlist's core/core path: for cleaner core settings.~~
 * ~~Spinner while indexing: Big lists can take a few seconds to fully index.~~
 * ~~New empty button in target playlist: Create new playlist within the UI.~~
+* Move options to it's own component: for performance
+* Playlist delete should not reindex: remove the game from each index entry, for performance
 
 I hope you find this program useful.
 
