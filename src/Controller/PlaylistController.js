@@ -88,7 +88,7 @@ export default class PlaylistController {
                 this.fullPath[wrap.game.path] = [wrap];
             }
 
-            const filename = wrap.game.path.match(/([^\\#]+\....)$/)[1];
+            const filename = wrap.game.path.match(/([^\\#]+)$/)[1];
             this.storeInRefs(this.filenameIndex,this.tokenize(filename),wrap);
             if (this.fullFilename[filename]) {
                 this.fullFilename[filename].push(wrap);
