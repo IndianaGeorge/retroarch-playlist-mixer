@@ -53,7 +53,7 @@ export default class PlaylistController {
     }
 
     storeInRefs(index,tokens,wrap) {
-        tokens.forEach(rl=>index[rl]?index[rl].push(wrap.index):index[rl]=[wrap.index])
+        tokens.forEach(rl=>index.hasOwnProperty(rl)?index[rl].push(wrap.index):index[rl]=[wrap.index])
     }
 
     indexSingle(wrap) {
